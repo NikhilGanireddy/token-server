@@ -134,7 +134,7 @@ app.get("/user/dashboard", async (req, res) => {
 /////////////////////////////////////////////////////////////
 
 // PORT AND DATABASE CONNECTION
-const port = process.env.PORT || 4000;
+const port = process.env.PORT;
 
 mongoose.connect(process.env.MONGO_URI).then(() => {
   app.listen(port);
