@@ -11,6 +11,15 @@ const SampleHostelUser = require("./Models/SampleHostelUser");
 
 /////////////////////////////////////////////////////////////
 
+// CONTSANTS
+
+const accountSid = "AC75a68cb76b4c86132e8913df7d8cd89c";
+const authToken = "cf37fa001f891b4cb14d748b855754ba";
+const client = require("twilio")(accountSid, authToken);
+
+
+/////////////////////////////////////////////////////////////
+
 // Middlewears
 app.use(express.json());
 app.use(express.urlencoded({
@@ -114,6 +123,32 @@ app.get("/user/dashboard", async (req, res) => {
         console.log(e);
     }
 });
+
+// COMPLAINTS POST ROUTE
+
+app.post("/user/complaints/sendComplaint", async (req, res) => {
+
+    const {userName, userHallTicket, userBranch, userYear, userMobile, complaint} = req.body
+    client.messages.create({
+        body: `FROM:
+            ${userName},
+            ${userHallTicket},
+            ${userMobile},
+            ${userBranch},
+            ${userYear} 
+            
+            <------ Complaint ------>
+            
+            ${complaint}
+            
+            <------ Ends ------>
+            `, from: "whatsapp:+14155238886", to: 'whatsapp:+918333020599'
+    }).then(() => console.log("Done")).catch(err => {
+        console.log(err)
+    })
+
+})
+
 /////////////////////////////////////////////////////////////
 
 // PORT AND DATABASE CONNECTION
