@@ -11,11 +11,6 @@ const SampleHostelUser = require("./Models/SampleHostelUser");
 
 /////////////////////////////////////////////////////////////
 
-// CONTSANTS
-
-const accountSid = "AC75a68cb76b4c86132e8913df7d8cd89c";
-const authToken = "cf37fa001f891b4cb14d748b855754ba";
-const client = require("twilio")(accountSid, authToken);
 
 
 /////////////////////////////////////////////////////////////
@@ -30,6 +25,13 @@ app.use(cookieParser());
 app.use(cors({
     credentials: true, origin: ["http://localhost:5173", "https://token-server.netlify.app"],
 }));
+
+
+// CONTSANTS
+
+
+const client = require("twilio")(process.env.SID, process.env.AUTHKEY);
+
 
 /////////////////////////////////////////////////////////////
 
