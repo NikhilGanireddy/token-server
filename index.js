@@ -206,6 +206,29 @@ app.post("/user/complaints/sendComplaint", async (req, res) => {
     res.json("DAONE");
 });
 
+
+// CHANGE PASSWORD
+
+app.post("/user/profile/changePassword", async (req, res) => {
+    const {hallTicket, currentPassword, newPassword, confirmNewPassword} = req.body
+
+    try {
+        const user = await SampleHostelUser.findOne({hallTicket})
+
+        if (user.password == currentPassword) {
+            const userUpdate = await SampleHostelUser.findOneAndUpdate({hallTicket}, {password: confirmNewPassword})
+            console.log("Done")
+            res.json({
+                message:"Paasword Changed"
+            })
+        } else console.log("nooo")
+    } catch (e) {
+        res.json(e)
+    }
+
+})
+
+
 /////////////////////////////////////////////////////////////
 
 // PORT AND DATABASE CONNECTION
