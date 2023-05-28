@@ -206,18 +206,10 @@ app.post("/user/complaints/sendComplaint", async (req, res) => {
     complaint,
   } = req.body;
   client.messages.create({
-    body: `FROM:
-            ${userName},
-            ${userHallTicket},
-            ${userMobile},
-            ${userBranch},
-            ${userYear} 
-            
-            <------ Complaint ------>
-            
+    body: `FROM: ${userName},${userHallTicket},${userMobile},${userBranch},${userYear} 
+           
+            Complaint:
             ${complaint}
-            
-            <------ Ends ------>
             `,
     from: "whatsapp:+14155238886",
     to: "whatsapp:+918333020599",
