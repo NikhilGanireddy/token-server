@@ -107,6 +107,7 @@ app.post("/login", async (req, res) => {
             fatherMobile: userExist.fatherMobile,
             address: userExist.address,
             complaints: userExist.complaints,
+            roomPic: userExist.roomPic,
           },
           process.env.JWT_SECRET,
           { expiresIn: "6h" },
@@ -143,40 +144,48 @@ app.get("/profile", (req, res) => {
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, {}, async (err, data) => {
       if (err) throw err;
-      const {
-        _id,
-        name,
-        room,
-        hallTicket,
-        branch,
-        year,
-        mobile,
-        pic,
-        batch,
-        motherName,
-        motherMobile,
-        fatherName,
-        fatherMobile,
-        address,
-        complaints,
-      } = await SampleHostelUser.findById(data.id);
-      res.json({
-        _id,
-        name,
-        room,
-        hallTicket,
-        branch,
-        year,
-        mobile,
-        pic,
-        batch,
-        motherName,
-        motherMobile,
-        fatherName,
-        fatherMobile,
-        address,
-        complaints,
-      });
+      SampleHostelUser.findById(data.id).then(
+        ({
+          _id,
+          name,
+          room,
+          hallTicket,
+          branch,
+          year,
+          mobile,
+          pic,
+          batch,
+          motherName,
+          motherMobile,
+          fatherName,
+          fatherMobile,
+          address,
+          complaints,
+          roomPic,
+        }) => {
+          SampleHostelUser.find({ room: room }).then((roomMates) => {
+            res.json({
+              _id,
+              name,
+              room,
+              hallTicket,
+              branch,
+              year,
+              mobile,
+              pic,
+              batch,
+              motherName,
+              motherMobile,
+              fatherName,
+              fatherMobile,
+              address,
+              complaints,
+              roomPic,
+              roomMates: roomMates,
+            });
+          });
+        }
+      );
     });
   }
 });
@@ -206,9 +215,14 @@ app.post("/user/complaints/sendComplaint", async (req, res) => {
     complaint,
   } = req.body;
   client.messages.create({
-    body: `FROM: ${userName},${userHallTicket},${userMobile},${userBranch},${userYear} 
-           
-            Complaint:
+    body: `Sub: Complaint
+    
+            From: ${userName}, 
+                  ${userHallTicket},
+                  ${userMobile},
+                  ${userYear} (${userBranch}) 
+
+            Message:
             ${complaint}
             `,
     from: "whatsapp:+14155238886",
@@ -241,7 +255,35 @@ app.post("/user/profile/changePassword", async (req, res) => {
   }
 });
 
-// ROOM MEMBERS
+// ROOM COMPLAINTS POST ROUTE
+
+app.post("/user/room/sendComplaint", async (req, res) => {
+  const {
+    userName,
+    userHallTicket,
+    userBranch,
+    userYear,
+    userMobile,
+    userRoom,
+    complaint,
+  } = req.body;
+  client.messages.create({
+    body: `Sub: Complaint regarding ${userRoom}
+
+            From: ${userName}, 
+                  ${userHallTicket},
+                  ${userMobile},
+                  ${userYear} (${userBranch}),
+                  ${userRoom}
+
+            Message:
+            ${complaint}
+            `,
+    from: "whatsapp:+14155238886",
+    to: "whatsapp:+918333020599",
+  });
+  res.json("DAONE");
+});
 
 /////////////////////////////////////////////////////////////
 
