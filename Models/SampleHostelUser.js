@@ -55,10 +55,16 @@ const UserSchema = new mongoose.Schema({
   complaints: {
     type: Array,
   },
-  roomPic:{
-    type:String,
-    default:"https://images.pexels.com/photos/1853951/pexels-photo-1853951.jpeg"
-  }
+  roomPic: {
+    type: String,
+    default:
+      "https://images.pexels.com/photos/1853951/pexels-photo-1853951.jpeg",
+  },
+
+  profile: {
+    type: String,
+    default: "user",
+  },
 });
 
 const SampleHostelUserModel = mongoose.model("SampleHostelUsers", UserSchema);

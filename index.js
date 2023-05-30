@@ -108,6 +108,7 @@ app.post("/login", async (req, res) => {
             address: userExist.address,
             complaints: userExist.complaints,
             roomPic: userExist.roomPic,
+            profile: userExist.profile,
           },
           process.env.JWT_SECRET,
           { expiresIn: "6h" },
@@ -121,10 +122,11 @@ app.post("/login", async (req, res) => {
               .json(userExist);
           }
         );
-      } else
-        res.status(401).json({
-          error: "not found",
-        });
+      }
+      // } else
+      //   res.status(401).json({
+      //     error: "not found",
+      //   });
 
       // console.log(userExist)
       // console.log(passwordMatch)
@@ -162,26 +164,31 @@ app.get("/profile", (req, res) => {
           address,
           complaints,
           roomPic,
+          profile,
         }) => {
-          SampleHostelUser.find({ room: room }).then((roomMates) => {
-            res.json({
-              _id,
-              name,
-              room,
-              hallTicket,
-              branch,
-              year,
-              mobile,
-              pic,
-              batch,
-              motherName,
-              motherMobile,
-              fatherName,
-              fatherMobile,
-              address,
-              complaints,
-              roomPic,
-              roomMates: roomMates,
+          SampleHostelUser.find().then((studentsList) => {
+            SampleHostelUser.find({ room: room }).then((roomMates) => {
+              res.json({
+                _id,
+                name,
+                room,
+                hallTicket,
+                branch,
+                year,
+                mobile,
+                pic,
+                batch,
+                motherName,
+                motherMobile,
+                fatherName,
+                fatherMobile,
+                address,
+                complaints,
+                roomPic,
+                profile,
+                roomMates: roomMates,
+                studentsList: studentsList,
+              });
             });
           });
         }
@@ -228,7 +235,11 @@ app.post("/user/complaints/sendComplaint", async (req, res) => {
     from: "whatsapp:+14155238886",
     to: "whatsapp:+918333020599",
   });
-  res.json("DAONE");
+  const updateComplaints = await SampleHostelUser.updateOne(
+    { hallTicket: userHallTicket },
+    { $push: { complaints: complaint } }
+  );
+  res.json("DONE");
 });
 
 // CHANGE PASSWORD
@@ -282,8 +293,21 @@ app.post("/user/room/sendComplaint", async (req, res) => {
     from: "whatsapp:+14155238886",
     to: "whatsapp:+918333020599",
   });
-  res.json("DAONE");
+  const updateComplaints = await SampleHostelUser.updateOne(
+    { hallTicket: userHallTicket },
+    { $push: { complaints: complaint } }
+  );
+  res.json("DONE");
 });
+
+// FIND ALL USERS
+
+// app.get("/admin/studentsList", async (req, res) => {
+//   try {
+//     const studnetsList = await SampleHostelUser.find();
+//     res.json(studnetsList);
+//   } catch (e) {}
+// });
 
 /////////////////////////////////////////////////////////////
 
