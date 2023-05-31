@@ -300,14 +300,53 @@ app.post("/user/room/sendComplaint", async (req, res) => {
   res.json("DONE");
 });
 
-// FIND ALL USERS
+/////////////////////////////////////////////////////////////
 
-// app.get("/admin/studentsList", async (req, res) => {
-//   try {
-//     const studnetsList = await SampleHostelUser.find();
-//     res.json(studnetsList);
-//   } catch (e) {}
-// });
+// ADMIN ROUTES
+
+app.post("/admin/students/createStudent", async (req, res) => {
+  const {
+    name,
+    hallTicket,
+    room,
+    year,
+    batch,
+    branch,
+    mobile,
+    motherName,
+    motherMobile,
+    fatherName,
+    fatherMobile,
+    address,
+    attendance,
+    outings,
+    complaints,
+    messCharges,
+  } = req.body;
+
+  await SampleHostelUser.create({
+    name,
+    hallTicket,
+    room,
+    year,
+    batch,
+    branch,
+    mobile,
+    motherName,
+    motherMobile,
+    fatherName,
+    fatherMobile,
+    address,
+    attendance,
+    outings,
+    complaints,
+    messCharges,
+  }).then(() => {
+    res.json({
+      message: "User created",
+    });
+  });
+});
 
 /////////////////////////////////////////////////////////////
 
