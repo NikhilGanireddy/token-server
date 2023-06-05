@@ -27,8 +27,8 @@ app.use(
     credentials: true,
     origin: [
       "http://localhost:5173",
-      // "https://token-server.netlify.app",
-      "https://token-client.vercel.app",
+      "https://token-server.netlify.app",
+      // "https://token-client.vercel.app",
     ],
   })
 );
