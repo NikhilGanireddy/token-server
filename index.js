@@ -26,7 +26,7 @@ app.use(
   cors({
     credentials: true,
     origin: "https://token-server.netlify.app",
-    // "https://token-client.vercel.app",
+    // origin: "http://localhost:5173",
   })
 );
 
